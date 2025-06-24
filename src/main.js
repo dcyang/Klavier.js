@@ -1,5 +1,3 @@
-import * as Tone from 'tone';
-
 class Piano {
     constructor() {
         this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
