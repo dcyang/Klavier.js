@@ -22,6 +22,14 @@ class Piano {
                 key.dataset.note = `${note}${octave}`;
                 key.dataset.octave = octave;
                 
+                // Add labels for C4 and A4
+                if (!isSharp && octave === 4 && (note === 'C' || note === 'A')) {
+                    const label = document.createElement('div');
+                    label.className = 'key-label';
+                    label.innerHTML = `${note}<sub>4</sub>`;
+                    key.appendChild(label);
+                }
+                
                 key.addEventListener('mousedown', () => this.playNote(key.dataset.note));
                 key.addEventListener('mouseup', () => this.stopNote(key.dataset.note));
                 key.addEventListener('touchstart', (e) => {
