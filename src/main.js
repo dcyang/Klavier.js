@@ -29,7 +29,7 @@ class Piano {
                     label.innerHTML = `${note}<sub>4</sub>`;
                     key.appendChild(label);
                 }
-                
+
                 key.addEventListener('mousedown', () => this.playNote(key.dataset.note));
                 key.addEventListener('mouseup', () => this.stopNote(key.dataset.note));
                 key.addEventListener('touchstart', (e) => {
@@ -115,4 +115,4 @@ class Piano {
 // Initialize piano when the page loads
 window.addEventListener('load', () => {
     new Piano();
-}); 
+});
