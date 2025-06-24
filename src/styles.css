@@ -27,16 +27,29 @@ h1 {
 
 #piano-container {
     background: #1a1a1a;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 20px 20px 0 20px;
+    border-radius: 10px 10px 0 0;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    overflow-x: auto;
+    overflow: hidden;
 }
 
 #piano {
     display: flex;
     position: relative;
     height: 200px;
+    min-width: min-content;
+}
+
+.scroll-area {
+    background: #06470c;
+    height: 30px;
+    overflow-x: auto;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-content {
+    height: 1px;
     min-width: min-content;
 }
 

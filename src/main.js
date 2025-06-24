@@ -10,6 +10,7 @@ class Piano {
 
     init() {
         const pianoElement = document.getElementById('piano');
+        const scrollContent = document.querySelector('.scroll-content');
         const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
         for (let octave = this.startOctave; octave < this.startOctave + this.octaves; octave++) {
@@ -35,6 +36,27 @@ class Piano {
                 this.keys.push(key);
             });
         }
+
+        // Sync scroll area width with piano width
+        const syncScrollWidth = () => {
+            scrollContent.style.width = pianoElement.scrollWidth + 'px';
+        };
+
+        // Initial sync
+        syncScrollWidth();
+
+        // Sync on window resize
+        window.addEventListener('resize', syncScrollWidth);
+
+        // Sync scrolling between piano and scroll area
+        const scrollArea = document.querySelector('.scroll-area');
+        pianoElement.parentElement.addEventListener('scroll', () => {
+            scrollArea.scrollLeft = pianoElement.parentElement.scrollLeft;
+        });
+
+        scrollArea.addEventListener('scroll', () => {
+            pianoElement.parentElement.scrollLeft = scrollArea.scrollLeft;
+        });
 
         // Add global touch event listeners to handle finger release outside keys
         document.addEventListener('touchend', (e) => {
