@@ -1,8 +1,8 @@
 class Piano {
     constructor() {
         this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
-        this.octaves = 2;
-        this.startOctave = 4;
+        this.octaves = 3;
+        this.startOctave = 3;
         this.keys = [];
         this.activeNotes = new Set();
         this.init();
@@ -13,14 +13,15 @@ class Piano {
         const scrollContent = document.querySelector('.scroll-content');
         const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
+        // Create all keys first
         for (let octave = this.startOctave; octave < this.startOctave + this.octaves; octave++) {
             notes.forEach(note => {
                 const key = document.createElement('div');
                 const isSharp = note.includes('#');
                 key.className = `piano-key ${isSharp ? 'black' : 'white'}`;
                 key.dataset.note = `${note}${octave}`;
+                key.dataset.octave = octave;
                 
-                // Add event listeners for both mouse and touch events
                 key.addEventListener('mousedown', () => this.playNote(key.dataset.note));
                 key.addEventListener('mouseup', () => this.stopNote(key.dataset.note));
                 key.addEventListener('touchstart', (e) => {
@@ -50,25 +51,34 @@ class Piano {
 
         // Sync scrolling between piano and scroll area
         const scrollArea = document.querySelector('.scroll-area');
-        pianoElement.parentElement.addEventListener('scroll', () => {
-            scrollArea.scrollLeft = pianoElement.parentElement.scrollLeft;
+        const pianoContainer = pianoElement.parentElement;
+
+        pianoContainer.addEventListener('scroll', () => {
+            scrollArea.scrollLeft = pianoContainer.scrollLeft;
         });
 
         scrollArea.addEventListener('scroll', () => {
-            pianoElement.parentElement.scrollLeft = scrollArea.scrollLeft;
+            pianoContainer.scrollLeft = scrollArea.scrollLeft;
         });
 
-        // Add global touch event listeners to handle finger release outside keys
+        // Scroll to C4 after a brief delay to ensure layout is complete
+        setTimeout(() => {
+            const c4Key = this.keys.find(key => key.dataset.note === 'C4');
+            if (c4Key) {
+                const scrollOffset = c4Key.offsetLeft;
+                pianoContainer.scrollLeft = scrollOffset;
+                scrollArea.scrollLeft = scrollOffset;
+            }
+        }, 100);
+
+        // Rest of your existing event listeners
         document.addEventListener('touchend', (e) => {
-            // Stop all active notes when touch ends anywhere on the document
             this.activeNotes.forEach(note => {
                 this.stopNote(note);
             });
         });
 
-        // Also handle mouse events globally for consistency
         document.addEventListener('mouseup', (e) => {
-            // Only stop notes if the mouse is not over a piano key
             const target = e.target;
             if (!target.classList.contains('piano-key')) {
                 this.activeNotes.forEach(note => {
